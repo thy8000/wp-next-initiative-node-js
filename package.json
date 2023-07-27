@@ -1,0 +1,20 @@
+{
+  "name": "wp-next-initiative-node",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "npx --watch tsc src/server.ts && node --watch src/server.js",
+    "request": "curl http://localhost:6666/hello"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^20.4.5",
+    "typescript": "^5.1.6"
+  },
+  "dependencies": {
+    "fastify": "^4.21.0"
+  }
+}
