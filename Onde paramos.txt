@@ -1,1 +1,1 @@
-Estrutura da aplicação - Aula 4 - Criando aplicação
+Banco de dados - Aula 2 - Configurando o Knex
