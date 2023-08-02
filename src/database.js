@@ -1,7 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.knex = exports.config = void 0;
+require("dotenv/config");
 var knex_1 = require("knex");
+console.log(process.env);
 exports.config = {
     client: "sqlite",
     connection: {
