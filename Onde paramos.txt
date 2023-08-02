@@ -1,1 +1,1 @@
-Banco de dados - Aula 3 - Criando primeira migration
+Banco de dados - Aula 5 - Realizando queries com Knex
