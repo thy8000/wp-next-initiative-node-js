@@ -85,7 +85,7 @@ function transactionsRoutes(app) {
                 });
             }); });
             app.post('/', function (request, reply) { return __awaiter(_this, void 0, void 0, function () {
-                var createTransactionBodySchema, _a, title, amount, type;
+                var createTransactionBodySchema, _a, title, amount, type, sessionId;
                 return __generator(this, function (_b) {
                     switch (_b.label) {
                         case 0:
@@ -95,10 +95,19 @@ function transactionsRoutes(app) {
                                 type: zod_1.z.enum(['credit', 'debit']),
                             });
                             _a = createTransactionBodySchema.parse(request.body), title = _a.title, amount = _a.amount, type = _a.type;
+                            sessionId = request.cookies.sessionId;
+                            if (!sessionId) {
+                                sessionId = (0, node_crypto_1.randomUUID)();
+                                reply.cookie('sessionId', sessionId, {
+                                    path: '/',
+                                    maxAge: 1000 * 60 * 60 * 24 * 7,
+                                });
+                            }
                             return [4 /*yield*/, (0, database_1.knex)('transactions').insert({
                                     id: (0, node_crypto_1.randomUUID)(),
                                     title: title,
                                     amount: type === 'credit' ? amount : amount * -1,
+                                    session_id: sessionId,
                                 })];
                         case 1:
                             _b.sent();
