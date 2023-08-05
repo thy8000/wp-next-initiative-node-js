@@ -73,6 +73,17 @@ function transactionsRoutes(app) {
                     }
                 });
             }); });
+            app.get('/summary', function () { return __awaiter(_this, void 0, void 0, function () {
+                var summary;
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0: return [4 /*yield*/, (0, database_1.knex)('transactions').sum('amount', { as: 'amount' }).first()];
+                        case 1:
+                            summary = _a.sent();
+                            return [2 /*return*/, { summary: summary }];
+                    }
+                });
+            }); });
             app.post('/', function (request, reply) { return __awaiter(_this, void 0, void 0, function () {
                 var createTransactionBodySchema, _a, title, amount, type;
                 return __generator(this, function (_b) {
