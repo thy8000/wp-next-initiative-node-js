@@ -4,7 +4,9 @@ var fastify_1 = require("fastify");
 var env_1 = require("./env");
 var transactions_1 = require("./routes/transactions");
 var app = (0, fastify_1.default)();
-app.register(transactions_1.transactionsRoutes);
+app.register(transactions_1.transactionsRoutes, {
+    prefix: 'transactions',
+});
 app.listen({
     port: env_1.env.PORT,
 }).then(function () {

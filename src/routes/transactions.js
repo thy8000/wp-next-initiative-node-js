@@ -38,18 +38,31 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.transactionsRoutes = void 0;
 var database_1 = require("../database");
+var zod_1 = require("zod");
+var node_crypto_1 = require("node:crypto");
 function transactionsRoutes(app) {
     return __awaiter(this, void 0, void 0, function () {
         var _this = this;
         return __generator(this, function (_a) {
-            app.get('/hello', function () { return __awaiter(_this, void 0, void 0, function () {
-                var transactions;
-                return __generator(this, function (_a) {
-                    switch (_a.label) {
-                        case 0: return [4 /*yield*/, (0, database_1.knex)('transactions').where('amount', 1000).select('*')];
+            app.post('/', function (request, reply) { return __awaiter(_this, void 0, void 0, function () {
+                var createTransactionBodySchema, _a, title, amount, type;
+                return __generator(this, function (_b) {
+                    switch (_b.label) {
+                        case 0:
+                            createTransactionBodySchema = zod_1.z.object({
+                                title: zod_1.z.string(),
+                                amount: zod_1.z.number(),
+                                type: zod_1.z.enum(['credit', 'debit']),
+                            });
+                            _a = createTransactionBodySchema.parse(request.body), title = _a.title, amount = _a.amount, type = _a.type;
+                            return [4 /*yield*/, (0, database_1.knex)('transactions').insert({
+                                    id: (0, node_crypto_1.randomUUID)(),
+                                    title: title,
+                                    amount: type === 'credit' ? amount : amount * -1,
+                                })];
                         case 1:
-                            transactions = _a.sent();
-                            return [2 /*return*/, transactions];
+                            _b.sent();
+                            return [2 /*return*/, reply.status(201).send()];
                     }
                 });
             }); });
