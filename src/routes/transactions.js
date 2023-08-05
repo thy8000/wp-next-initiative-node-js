@@ -44,6 +44,35 @@ function transactionsRoutes(app) {
     return __awaiter(this, void 0, void 0, function () {
         var _this = this;
         return __generator(this, function (_a) {
+            app.get('/', function () { return __awaiter(_this, void 0, void 0, function () {
+                var transactions;
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0: return [4 /*yield*/, (0, database_1.knex)('transactions').select()];
+                        case 1:
+                            transactions = _a.sent();
+                            return [2 /*return*/, {
+                                    transactions: transactions,
+                                }];
+                    }
+                });
+            }); });
+            app.get('/:id', function (request) { return __awaiter(_this, void 0, void 0, function () {
+                var getTransactionsParamsSchema, id, transaction;
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0:
+                            getTransactionsParamsSchema = zod_1.z.object({
+                                id: zod_1.z.string().uuid(),
+                            });
+                            id = getTransactionsParamsSchema.parse(request.params).id;
+                            return [4 /*yield*/, (0, database_1.knex)('transactions').where('id', id).first()];
+                        case 1:
+                            transaction = _a.sent();
+                            return [2 /*return*/, { transaction: transaction }];
+                    }
+                });
+            }); });
             app.post('/', function (request, reply) { return __awaiter(_this, void 0, void 0, function () {
                 var createTransactionBodySchema, _a, title, amount, type;
                 return __generator(this, function (_b) {
