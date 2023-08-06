@@ -40,15 +40,18 @@ exports.transactionsRoutes = void 0;
 var database_1 = require("../database");
 var zod_1 = require("zod");
 var node_crypto_1 = require("node:crypto");
+var check_session_id_exists_1 = require("../middlewares/check-session-id-exists");
 function transactionsRoutes(app) {
     return __awaiter(this, void 0, void 0, function () {
         var _this = this;
         return __generator(this, function (_a) {
-            app.get('/', function () { return __awaiter(_this, void 0, void 0, function () {
-                var transactions;
+            app.get('/', { preHandler: [check_session_id_exists_1.checkSessionIdExists], }, function (request, reply) { return __awaiter(_this, void 0, void 0, function () {
+                var sessionId, transactions;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
-                        case 0: return [4 /*yield*/, (0, database_1.knex)('transactions').select()];
+                        case 0:
+                            sessionId = request.cookies.sessionId;
+                            return [4 /*yield*/, (0, database_1.knex)('transactions').where('session_id', sessionId).select()];
                         case 1:
                             transactions = _a.sent();
                             return [2 /*return*/, {
@@ -57,8 +60,8 @@ function transactionsRoutes(app) {
                     }
                 });
             }); });
-            app.get('/:id', function (request) { return __awaiter(_this, void 0, void 0, function () {
-                var getTransactionsParamsSchema, id, transaction;
+            app.get('/:id', { preHandler: [check_session_id_exists_1.checkSessionIdExists], }, function (request) { return __awaiter(_this, void 0, void 0, function () {
+                var getTransactionsParamsSchema, id, sessionId, transaction;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
                         case 0:
@@ -66,18 +69,29 @@ function transactionsRoutes(app) {
                                 id: zod_1.z.string().uuid(),
                             });
                             id = getTransactionsParamsSchema.parse(request.params).id;
-                            return [4 /*yield*/, (0, database_1.knex)('transactions').where('id', id).first()];
+                            sessionId = request.cookies.sessionId;
+                            return [4 /*yield*/, (0, database_1.knex)('transactions')
+                                    .where({
+                                    session_id: sessionId,
+                                    id: id,
+                                })
+                                    .first()];
                         case 1:
                             transaction = _a.sent();
                             return [2 /*return*/, { transaction: transaction }];
                     }
                 });
             }); });
-            app.get('/summary', function () { return __awaiter(_this, void 0, void 0, function () {
-                var summary;
+            app.get('/summary', { preHandler: [check_session_id_exists_1.checkSessionIdExists], }, function (request) { return __awaiter(_this, void 0, void 0, function () {
+                var sessionId, summary;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
-                        case 0: return [4 /*yield*/, (0, database_1.knex)('transactions').sum('amount', { as: 'amount' }).first()];
+                        case 0:
+                            sessionId = request.cookies.sessionId;
+                            return [4 /*yield*/, (0, database_1.knex)('transactions')
+                                    .where('session_id', sessionId)
+                                    .sum('amount', { as: 'amount' })
+                                    .first()];
                         case 1:
                             summary = _a.sent();
                             return [2 /*return*/, { summary: summary }];
