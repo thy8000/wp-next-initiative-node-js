@@ -45,6 +45,12 @@ function transactionsRoutes(app) {
     return __awaiter(this, void 0, void 0, function () {
         var _this = this;
         return __generator(this, function (_a) {
+            app.addHook('preHandler', function (request, reply) { return __awaiter(_this, void 0, void 0, function () {
+                return __generator(this, function (_a) {
+                    console.log('aaaaaaa');
+                    return [2 /*return*/];
+                });
+            }); });
             app.get('/', { preHandler: [check_session_id_exists_1.checkSessionIdExists], }, function (request, reply) { return __awaiter(_this, void 0, void 0, function () {
                 var sessionId, transactions;
                 return __generator(this, function (_a) {
